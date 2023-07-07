@@ -6,9 +6,9 @@ const  AxiosService = {
     return await axiosConfig.get<Array<RecipeType>>("/list");
   },
 
-  // get(id: string) {
-  //   return axiosConfig.get<RecipeType>(`/get/${id}`);
-  // },
+  async find(data: RecipeType){
+    return await axiosConfig.get<any>("/find", {data})
+  },
 
   async create(data: RecipeType) {
     return await axiosConfig.post<RecipeType>("/create", data);
@@ -19,7 +19,12 @@ const  AxiosService = {
   },
 
   async delete(id: any) {
-    return await axiosConfig.delete<any>(`/delete/${id}`);
+    return await axiosConfig.delete<any>(`/delete/${id}`).then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
   }
 }
 

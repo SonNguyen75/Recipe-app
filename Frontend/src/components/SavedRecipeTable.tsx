@@ -2,8 +2,7 @@ import { ListGroup, Button, Modal } from "react-bootstrap";
 import "./css/SavedRecipeTable.css";
 import { useState } from "react";
 import RecipeType from "../type";
-
-
+import AxiosService from "../Helper/axiosService";
 
 interface Props {
   recipes: RecipeType[];
@@ -19,6 +18,15 @@ function SavedRecipeTable({ recipes }: Props) {
     setSelectedRecipe(recipe);
     handleShowModal();
   }
+
+ //Create new recipe
+ const handleDeleteClick = async (recipe : RecipeType | undefined) => {
+	const deletedRecipeId = await AxiosService.find(recipe as RecipeType);
+	if (deletedRecipeId.status == 200){
+		const deletedRecipe = AxiosService.delete(deletedRecipeId.data);
+	}
+	handleCloseModal();
+ }		
   return (
     <>
       <div className="center">
@@ -56,9 +64,10 @@ function SavedRecipeTable({ recipes }: Props) {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
+          <Button variant="danger" onClick={() => {handleDeleteClick(selectedRecipe)}}>
+            Delete
           </Button>
+        
         </Modal.Footer>
       </Modal>
     </>

@@ -2,13 +2,13 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import RecipeModal from "./RecipeModal.js";
+import cors from "cors";
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 const port = 3001;
 
-import cors from "cors";
 app.use(cors());
 
 mongoose
@@ -27,6 +27,11 @@ app.get("/api/list", async (req, res) => {
   res.json(recipe);
 });
 
+app.get("/api/find", async(req, res) => {
+  const recipe = await RecipeModal.findOne(res.body);
+  res.send(recipe._id);
+});
+
 app.post("/api/create", async (req, res) => {
   try {
     const newRecipe = new RecipeModal(req.body);
@@ -43,11 +48,11 @@ app.put("/api/update", async (req, res) => {
   res.send("Recipe updated");
 });
 
-app.delete("/api/delete", async (req, res) => {
-  await RecipeModal.deleteOne({ _id: req.body._id });
-  res.send("Recipe deleted");
+app.delete("/api/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  await RecipeModal.deleteOne({ _id: id});
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Backend is listening on port ${port}`);
 });

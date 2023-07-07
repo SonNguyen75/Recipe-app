@@ -8,16 +8,7 @@ import RecipeType from "./type";
 
 function App() {
   const [recipeData, setRecipeData] = useState<RecipeType[]>([]);
-
-  // useEffect(() => {
-  //   const savedRecipe = localStorage.getItem("recipes");
-  //   if (savedRecipe) {
-  //     const parsedRecipe = JSON.parse(savedRecipe);
-  //     setRecipeData(parsedRecipe);
-  //   }
-  // }, []);
-
-  // hàm get list
+  //Get all recipes
   const getListRecipe = async () => {
     const savedRecipe = await AxiosService.getAll();
     if (savedRecipe.data) {
@@ -25,23 +16,19 @@ function App() {
     }
   };
 
-  // hàm create mới
+  //Create new recipe
   const createRecipe = async (recipe: RecipeType) => {
     const savedRecipe = await AxiosService.create(recipe);
     if (savedRecipe.status == 200) {
-      alert("succesfully!")
-      
+      alert("Recipe added!")
     }
   };
 
-  //giờ mình sẽ lấy data bằng cách call api
   useEffect(() => {
     getListRecipe();
   }, []);
 
-  // sau khi submit thì sẽ call api để lấy lại data
   const handleSubmit = (recipe: RecipeType) => {
-    console.log(recipe);
     createRecipe(recipe)
     getListRecipe();
   };

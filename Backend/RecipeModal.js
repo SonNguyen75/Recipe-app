@@ -3,8 +3,8 @@ const { Schema } = mongoose;
 
 const RecipeSchema = new Schema({
   recipeName: String,
-  ingridients: String,
-  direction: String,
+  ingredients: String,
+  directions: String,
 });
 
 const RecipeModal = mongoose.model('RecipeModal', RecipeSchema);
