@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const RecipeSchema = new Schema({
-  name: String,
+  recipeName: String,
   ingridients: String,
   direction: String,
 });

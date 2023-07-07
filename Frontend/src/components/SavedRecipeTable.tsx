@@ -1,24 +1,21 @@
 import { ListGroup, Button, Modal } from "react-bootstrap";
 import "./css/SavedRecipeTable.css";
 import { useState } from "react";
+import RecipeType from "../type";
 
-interface Recipe {
-  recipeName: string;
-  ingredients: string;
-  directions: string;
-}
+
 
 interface Props {
-  recipes: Recipe[];
+  recipes: RecipeType[];
 }
 function SavedRecipeTable({ recipes }: Props) {
   const [showModal, setShowModal] = useState(false);
-  const [selectedRecipe, setSelectedRecipe] = useState<Recipe>();
+  const [selectedRecipe, setSelectedRecipe] = useState<RecipeType>();
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const handleTableItemClick = (recipe : Recipe) => {
+  const handleTableItemClick = (recipe : RecipeType) => {
     setSelectedRecipe(recipe);
     handleShowModal();
   }

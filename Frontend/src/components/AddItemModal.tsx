@@ -4,15 +4,16 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
 import "./css/AddItemModal.css"
+import RecipeType from "../type";
 
-interface Recipe {
-  recipeName: string;
-  ingredients: string;
-  directions: string;
-}
+// interface Recipe {
+//   recipeName: string;
+//   ingredients: string;
+//   directions: string;
+// }
 
 interface Props{
-  handleSubmit: (recipe: Recipe) => void;
+  handleSubmit: (recipe: RecipeType) => void;
 }
 
 function AddItemModal({handleSubmit} : Props) {
@@ -38,7 +39,7 @@ function AddItemModal({handleSubmit} : Props) {
 
   const handleFormSubmit = (event : React.FormEvent) => {
     event.preventDefault();
-    const newRecipe : Recipe = {
+    const newRecipe : RecipeType = {
       recipeName: recipeName,
       ingredients: ingredients,
       directions: directions
@@ -48,9 +49,9 @@ function AddItemModal({handleSubmit} : Props) {
     handleClose();
   };
 
-  const saveToLocalStorage = (newRecipe : Recipe) => {
+  const saveToLocalStorage = (newRecipe : RecipeType) => {
     const storedRecipes = localStorage.getItem('recipes');
-    let recipes : Recipe[] = [];
+    let recipes : RecipeType[] = [];
     if(storedRecipes) {
       recipes = JSON.parse(storedRecipes)
     }
