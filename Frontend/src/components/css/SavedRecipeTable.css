@@ -1,0 +1,18 @@
+.center{
+    display: flex;
+    justify-content: center;
+}
+
+.list-group{
+    width : 800px;
+    margin-bottom: 16px;
+}
+
+.list-item-header{
+    font-weight: bold;
+}
+
+.paragraph{
+    white-space: pre-line;
+}
+
