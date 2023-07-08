@@ -19,12 +19,7 @@ const  AxiosService = {
   },
 
   async delete(id: any) {
-    return await axiosConfig.delete<any>(`/delete/${id}`).then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.error(error);
-    });
+    return await axiosConfig.delete<any>(`/delete/${id}`)
   }
 }
 

@@ -6,26 +6,32 @@ import AxiosService from "../Helper/axiosService";
 
 interface Props {
   recipes: RecipeType[];
+  getListRecipe: ()=>{}
 }
-function SavedRecipeTable({ recipes }: Props) {
+function SavedRecipeTable({ recipes, getListRecipe }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeType>();
+  const [selectedRecipeID, setSelectedRecipeID] = useState<any>();
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const handleTableItemClick = (recipe : RecipeType) => {
+  const handleTableItemClick = (recipe : any) => {
     setSelectedRecipe(recipe);
+    setSelectedRecipeID(recipe._id)
     handleShowModal();
   }
 
  //Create new recipe
  const handleDeleteClick = async (recipe : RecipeType | undefined) => {
-	const deletedRecipeId = await AxiosService.find(recipe as RecipeType);
-	if (deletedRecipeId.status == 200){
-		const deletedRecipe = AxiosService.delete(deletedRecipeId.data);
-	}
-	handleCloseModal();
+	// const deletedRecipeId = await AxiosService.find(recipe as RecipeType);
+	const deletedRecipe = await  AxiosService.delete(selectedRecipeID);
+  if (deletedRecipe.status == 200) {
+    alert("delete!")
+    handleCloseModal();
+    getListRecipe()
+  }
+	
  }		
   return (
     <>

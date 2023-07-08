@@ -21,6 +21,7 @@ function App() {
     const savedRecipe = await AxiosService.create(recipe);
     if (savedRecipe.status == 200) {
       alert("Recipe added!")
+      getListRecipe();
     }
   };
 
@@ -30,13 +31,13 @@ function App() {
 
   const handleSubmit = (recipe: RecipeType) => {
     createRecipe(recipe)
-    getListRecipe();
+    
   };
 
   return (
     <div className="App">
       <h1>Recipe App</h1>
-      <SavedRecipeTable recipes={recipeData}></SavedRecipeTable>
+      <SavedRecipeTable recipes={recipeData} getListRecipe={getListRecipe}></SavedRecipeTable>
       <AddItemModal handleSubmit={handleSubmit} />
     </div>
   );

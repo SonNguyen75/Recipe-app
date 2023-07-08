@@ -27,7 +27,7 @@ app.get("/api/list", async (req, res) => {
   res.json(recipe);
 });
 
-app.get("/api/find", async(req, res) => {
+app.get("/api/find", async (req, res) => {
   const recipe = await RecipeModal.findOne(res.body);
   res.send(recipe._id);
 });
@@ -37,9 +37,7 @@ app.post("/api/create", async (req, res) => {
     const newRecipe = new RecipeModal(req.body);
     await newRecipe.save();
     res.send("Recipe created");
-  } catch (error) {
-
-  }
+  } catch (error) {}
 });
 
 app.put("/api/update", async (req, res) => {
@@ -49,8 +47,13 @@ app.put("/api/update", async (req, res) => {
 });
 
 app.delete("/api/delete/:id", async (req, res) => {
-  const { id } = req.params;
-  await RecipeModal.deleteOne({ _id: id});
+  try {
+    const { id } = req.params;
+    await RecipeModal.deleteOne({ _id: id });
+    res.send("Recipe delete");
+  } catch (error) {
+    res.send("Recipe updated");
+  }
 });
 
 app.listen(port, () => {
