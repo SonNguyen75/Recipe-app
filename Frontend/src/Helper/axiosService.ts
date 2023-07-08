@@ -15,6 +15,7 @@ const  AxiosService = {
   },
 
   async update(data: RecipeType, id: any) {
+    console.log(id)
     return await axiosConfig.put<any>(`/update/${id}`, data);
   },
 

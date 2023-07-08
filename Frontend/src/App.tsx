@@ -31,7 +31,6 @@ function App() {
 
   const handleSubmit = (recipe: RecipeType) => {
     createRecipe(recipe)
-    
   };
 
   return (

@@ -37,12 +37,16 @@ app.post("/api/create", async (req, res) => {
     const newRecipe = new RecipeModal(req.body);
     await newRecipe.save();
     res.send("Recipe created");
-  } catch (error) {}
+  } catch (error) { }
 });
 
-app.put("/api/update", async (req, res) => {
-  await RecipeModal.updateOne({ _id: req.body._id }, req.body);
-  console.log(req.body);
+app.put("/api/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params
+    await RecipeModal.updateOne({ _id: id }, req.body);
+  } catch (error) {
+    console.log(error)
+  }
   res.send("Recipe updated");
 });
 

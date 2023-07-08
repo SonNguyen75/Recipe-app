@@ -1,38 +1,70 @@
-import { ListGroup, Button, Modal } from "react-bootstrap";
+import { ListGroup, Button, Modal, Form } from "react-bootstrap";
 import "./css/SavedRecipeTable.css";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import RecipeType from "../type";
 import AxiosService from "../Helper/axiosService";
 
 interface Props {
   recipes: RecipeType[];
-  getListRecipe: ()=>{}
+  getListRecipe: () => {};
 }
 function SavedRecipeTable({ recipes, getListRecipe }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState<RecipeType>();
   const [selectedRecipeID, setSelectedRecipeID] = useState<any>();
 
+  //States to edit recipe
+  const [recipeName, setRecipeName] = useState('');
+  const [ingredients, setIngridients] = useState('');
+  const [directions, setDirections] = useState('');  
+
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  const handleTableItemClick = (recipe : any) => {
+  const handleTableItemClick = (recipe: any) => {
     setSelectedRecipe(recipe);
-    setSelectedRecipeID(recipe._id)
+    setSelectedRecipeID(recipe._id);
     handleShowModal();
+  };
+
+  //Functions to edit the recipe
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setRecipeName(event.currentTarget.value);
+  };
+
+  const handleIngridientsChange = (event : ChangeEvent<HTMLInputElement>) => {
+    setIngridients(event.currentTarget.value);
   }
 
- //Create new recipe
- const handleDeleteClick = async (recipe : RecipeType | undefined) => {
-	// const deletedRecipeId = await AxiosService.find(recipe as RecipeType);
-	const deletedRecipe = await  AxiosService.delete(selectedRecipeID);
-  if (deletedRecipe.status == 200) {
-    alert("delete!")
-    handleCloseModal();
-    getListRecipe()
+  const handleDirectionsChange = (event : ChangeEvent<HTMLInputElement>) => {
+    setDirections(event.currentTarget.value);
   }
-	
- }		
+
+  //Create new recipe
+  const handleDeleteClick = async (recipe: RecipeType | undefined) => {
+    // const deletedRecipeId = await AxiosService.find(recipe as RecipeType);
+    const deletedRecipe = await AxiosService.delete(selectedRecipeID);
+    if (deletedRecipe.status == 200) {
+      alert("Recipe deleted!");
+      handleCloseModal();
+      getListRecipe();
+    }
+  };
+
+  const handleEditClick = async () => {
+    const updatedRecipe: RecipeType = {
+      recipeName: recipeName !== '' ? recipeName : selectedRecipe?.recipeName || '',
+      ingredients: ingredients !== '' ? ingredients : selectedRecipe?.ingredients || '',
+      directions: directions !== '' ? directions : selectedRecipe?.directions || ''
+    };
+    
+    const resonse = await AxiosService.update(updatedRecipe, selectedRecipeID)
+    if (resonse.status == 200){
+      alert("Recipe updated!");
+      handleCloseModal();
+      getListRecipe();
+    }
+  }
   return (
     <>
       <div className="center">
@@ -47,7 +79,8 @@ function SavedRecipeTable({ recipes, getListRecipe }: Props) {
             <ListGroup.Item
               key={index}
               action
-              onClick={() => handleTableItemClick(recipe)}>
+              onClick={() => handleTableItemClick(recipe)}
+            >
               {recipe.recipeName}
             </ListGroup.Item>
           ))}
@@ -60,20 +93,58 @@ function SavedRecipeTable({ recipes, getListRecipe }: Props) {
         <Modal.Body>
           {selectedRecipe && (
             <div>
-              <h4>Recipe Name</h4>
-              <p className="paragraph">{selectedRecipe.recipeName}</p>
-              <h4>Ingredients</h4>
-              <p className="paragraph">{selectedRecipe.ingredients}</p>
-              <h4>Directions</h4>
-              <p className="paragraph">{selectedRecipe.directions}</p>
+              <Form id="form">
+                <Form.Group className="mb-3" controlId="addItemForm.RecipeName">
+                  <Form.Label>Recipe Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    defaultValue={selectedRecipe.recipeName}
+                    autoFocus
+                    onChange={handleNameChange}
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-3"
+                  controlId="addItemForm.Ingredients"
+                >
+                  <Form.Label>Ingredients</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    defaultValue={selectedRecipe.ingredients}
+                    rows={3}
+                    onChange={handleIngridientsChange}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="addItemForm.Directions">
+                  <Form.Label>Directions</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    defaultValue={selectedRecipe.directions}
+                    rows={3}
+                    onChange={handleDirectionsChange}
+                  />
+                </Form.Group>
+              </Form>
             </div>
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={() => {handleDeleteClick(selectedRecipe)}}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              handleDeleteClick(selectedRecipe);
+            }}
+          >
             Delete
           </Button>
-        
+          <Button
+            variant="dark"
+            onClick={() => {
+              handleEditClick();
+            }}
+          >
+            Edit
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
