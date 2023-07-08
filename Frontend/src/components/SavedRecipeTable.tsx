@@ -14,9 +14,9 @@ function SavedRecipeTable({ recipes, getListRecipe }: Props) {
   const [selectedRecipeID, setSelectedRecipeID] = useState<any>();
 
   //States to edit recipe
-  const [recipeName, setRecipeName] = useState('');
-  const [ingredients, setIngridients] = useState('');
-  const [directions, setDirections] = useState('');  
+  const [recipeName, setRecipeName] = useState("");
+  const [ingredients, setIngridients] = useState("");
+  const [directions, setDirections] = useState("");
 
   const handleShowModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -29,16 +29,17 @@ function SavedRecipeTable({ recipes, getListRecipe }: Props) {
 
   //Functions to edit the recipe
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //Only update if string is not empty
     setRecipeName(event.currentTarget.value);
   };
 
-  const handleIngridientsChange = (event : ChangeEvent<HTMLInputElement>) => {
+  const handleIngridientsChange = (event: ChangeEvent<HTMLInputElement>) => {
     setIngridients(event.currentTarget.value);
-  }
+  };
 
-  const handleDirectionsChange = (event : ChangeEvent<HTMLInputElement>) => {
+  const handleDirectionsChange = (event: ChangeEvent<HTMLInputElement>) => {
     setDirections(event.currentTarget.value);
-  }
+  };
 
   //Create new recipe
   const handleDeleteClick = async (recipe: RecipeType | undefined) => {
@@ -53,18 +54,21 @@ function SavedRecipeTable({ recipes, getListRecipe }: Props) {
 
   const handleEditClick = async () => {
     const updatedRecipe: RecipeType = {
-      recipeName: recipeName !== '' ? recipeName : selectedRecipe?.recipeName || '',
-      ingredients: ingredients !== '' ? ingredients : selectedRecipe?.ingredients || '',
-      directions: directions !== '' ? directions : selectedRecipe?.directions || ''
+      recipeName:
+        recipeName !== "" ? recipeName : selectedRecipe?.recipeName || "",
+      ingredients:
+        ingredients !== "" ? ingredients : selectedRecipe?.ingredients || "",
+      directions:
+        directions !== "" ? directions : selectedRecipe?.directions || "",
     };
-    
-    const resonse = await AxiosService.update(updatedRecipe, selectedRecipeID)
-    if (resonse.status == 200){
+
+    const resonse = await AxiosService.update(updatedRecipe, selectedRecipeID);
+    if (resonse.status == 200) {
       alert("Recipe updated!");
       handleCloseModal();
       getListRecipe();
     }
-  }
+  };
   return (
     <>
       <div className="center">
