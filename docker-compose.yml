@@ -1,0 +1,16 @@
+version: '3'
+services:
+  frontend:
+    image: electricblue2075/recipe-app-frontend
+    ports:
+      - 3000:3000
+  backend:
+    image: electricblue2075/recipe-app-backend
+    ports:
+      - 3001:3001
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+      volumes:
+        - ./data:/data/db
